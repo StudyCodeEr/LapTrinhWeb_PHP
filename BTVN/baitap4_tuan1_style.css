@@ -1,0 +1,49 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f0f0f0;
+}
+
+.main-box {
+    width: 500px;
+    margin: 20px auto;
+    padding: 15px;
+    border: 1px solid #ccc;
+    background: #fff;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+.input-area p {
+    margin: 10px 0;
+}
+
+.input-area input[type="text"] {
+    padding: 5px;
+    border: 1px solid #ccc;
+}
+
+.input-area input[type="submit"] {
+    padding: 5px 10px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.input-area input[type="submit"]:hover {
+    background: #45a049;
+}
+
+.output-area {
+    margin-top: 20px;
+    padding: 10px;
+    background: #e6f3ff;
+}
+
+.output-area p {
+    margin: 5px 0;
+    color: #333;
+}
