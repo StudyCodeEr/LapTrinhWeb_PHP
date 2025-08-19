@@ -14,7 +14,7 @@
         </a>
         <a class="week-box" href="week2.php">
             <h2>Tuần 2</h2>
-            <p>?</p>
+            <p>Bài tập GET & POST</p>
         </a>
         <a class="week-box" href="week3.php">
             <h2>Tuần 3</h2>
