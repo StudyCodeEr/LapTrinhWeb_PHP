@@ -2,28 +2,35 @@
 
 // Nếu có dữ liệu GET
 if ($_SERVER["REQUEST_METHOD"] == "GET" && !empty($_GET)) {
+    $ten_sach = htmlspecialchars($_GET['ten_sach']);
+    $tac_gia = htmlspecialchars($_GET['tac_gia']);
+    $nxb = htmlspecialchars($_GET['nxb']);
+    $nam_xuat_ban = htmlspecialchars($_GET['nam_xuat_ban']);
+
     echo '<div class="result"><h3>Kết quả (GET):</h3>';
-    echo "Tên sách: " . htmlspecialchars($_GET['book']) . "<br>";
-    echo "Tác giả: " . htmlspecialchars($_GET['author']) . "<br>";
-    echo "Nhà xuất bản: " . htmlspecialchars($_GET['publisher']) . "<br>";
-    echo "Năm xuất bản: " . htmlspecialchars($_GET['year']) . "<br></div><br>";
+    echo "Tên sách: " . $ten_sach . "<br>";
+    echo "Tác giả: " . $tac_gia . "<br>";
+    echo "Nhà xuất bản: " . $nxb . "<br>";
+    echo "Năm xuất bản: " . $nam_xuat_ban . "<br></div><br>";
 }
 
 // Nếu có dữ liệu POST
 if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST)) {
+    $ten_sach = htmlspecialchars($_POST['ten_sach']);
+    $tac_gia = htmlspecialchars($_POST['tac_gia']);
+    $nxb = htmlspecialchars($_POST['nxb']);
+    $nam_xuat_ban = htmlspecialchars($_POST['nam_xuat_ban']);
+
     echo '<div class="result"><h3>Kết quả (POST):</h3>';
-    echo "Tên sách: " . htmlspecialchars($_POST['book']) . "<br>";
-    echo "Tác giả: " . htmlspecialchars($_POST['author']) . "<br>";
-    echo "Nhà xuất bản: " . htmlspecialchars($_POST['publisher']) . "<br>";
-    echo "Năm xuất bản: " . htmlspecialchars($_POST['year']) . "<br></div><br>";
+    echo "Tên sách: " . $ten_sach . "<br>";
+    echo "Tác giả: " . $tac_gia . "<br>";
+    echo "Nhà xuất bản: " . $nxb . "<br>";
+    echo "Năm xuất bản: " . $nam_xuat_ban . "<br></div><br>";
 }
 
 ?>
 
 <!DOCTYPE html>
-<html>
-<head>
-    <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -57,12 +64,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST)) {
 
         input[type="text"], 
         input[type="number"] {
-            width: calc(100% - 12px); /* rộng hết nhưng chừa padding */
+            width: calc(100% - 12px);
             padding: 6px;
             margin-top: 5px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            box-sizing: border-box; /* đảm bảo width tính cả padding */
+            box-sizing: border-box;
         }
         input[type="submit"] {
             margin-top: 15px;
@@ -91,26 +98,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST)) {
         }
     </style>
 </head>
-
-</head>
 <body>
     <h2>Form nhập thông tin sách (GET)</h2>
     <form method="get" action="">
-        Tên sách: <input type="text" name="book"><br>
-        Tác giả: <input type="text" name="author"><br>
-        Nhà xuất bản: <input type="text" name="publisher"><br>
-        Năm xuất bản: <input type="number" name="year"><br>
+        Tên sách: <input type="text" name="ten_sach"><br>
+        Tác giả: <input type="text" name="tac_gia"><br>
+        Nhà xuất bản: <input type="text" name="nxb"><br>
+        Năm xuất bản: <input type="number" name="nam_xuat_ban"><br>
         <input type="submit" value="Gửi bằng GET">
     </form>
 
     <h2>Form nhập thông tin sách (POST)</h2>
     <form method="post" action="">
-        Tên sách: <input type="text" name="book"><br>
-        Tác giả: <input type="text" name="author"><br>
-        Nhà xuất bản: <input type="text" name="publisher"><br>
-        Năm xuất bản: <input type="number" name="year"><br>
+        Tên sách: <input type="text" name="ten_sach"><br>
+        Tác giả: <input type="text" name="tac_gia"><br>
+        Nhà xuất bản: <input type="text" name="nxb"><br>
+        Năm xuất bản: <input type="number" name="nam_xuat_ban"><br>
         <input type="submit" value="Gửi bằng POST">
     </form>
+
     <h3>Khác nhau giữa GET và POST</h3>
     <ul>
         <li>GET gửi dữ liệu qua URL, dễ thấy và copy được link.</li>
