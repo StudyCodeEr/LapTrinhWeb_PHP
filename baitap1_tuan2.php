@@ -111,5 +111,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST)) {
         Năm xuất bản: <input type="number" name="year"><br>
         <input type="submit" value="Gửi bằng POST">
     </form>
+    <h3>Khác nhau giữa GET và POST</h3>
+    <ul>
+        <li>GET gửi dữ liệu qua URL, dễ thấy và copy được link.</li>
+        <li>POST gửi dữ liệu ẩn trong body, an toàn hơn và không giới hạn nhiều.</li>
+    </ul>
 </body>
 </html>
