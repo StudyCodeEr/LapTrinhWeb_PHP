@@ -1,6 +1,6 @@
 <?php
 
-// Nếu có dữ liệu GET
+//GET
 if ($_SERVER["REQUEST_METHOD"] == "GET" && !empty($_GET)) {
     $ten_sach = htmlspecialchars($_GET['ten_sach']);
     $tac_gia = htmlspecialchars($_GET['tac_gia']);
@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && !empty($_GET)) {
     echo "Năm xuất bản: " . $nam_xuat_ban . "<br></div><br>";
 }
 
-// Nếu có dữ liệu POST
+//POST
 if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST)) {
     $ten_sach = htmlspecialchars($_POST['ten_sach']);
     $tac_gia = htmlspecialchars($_POST['tac_gia']);
