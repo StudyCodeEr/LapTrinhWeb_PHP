@@ -24,29 +24,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // 🔹 Upload lên freeimage.host thay vì lưu local
     if (isset($_FILES["receipt"]) && $_FILES["receipt"]["error"] == UPLOAD_ERR_OK) {
-        $api_key = "6d207e02198a847aa98d0a2a901485a5";
-        $image = base64_encode(file_get_contents($_FILES["receipt"]["tmp_name"]));
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://freeimage.host/api/1/upload");
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, [
-            "key" => $api_key,
-            "action" => "upload",
-            "source" => $image,
-            "format" => "json"
-        ]);
-        $response = curl_exec($ch);
-        curl_close($ch);
-
-        $result = json_decode($response, true);
-        if (isset($result["image"]["url"])) {
-            $file = $result["image"]["url"];
+        // Giới hạn 1MB
+        if ($_FILES["receipt"]["size"] > 1024 * 1024) {
+            $errors["receipt"] = "❌ File quá lớn! Vui lòng chọn ảnh nhỏ hơn 1MB.";
         } else {
-            $errors["receipt"] = "Upload failed. Please try again.";
+            $image = base64_encode(file_get_contents($_FILES["receipt"]["tmp_name"]));
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, "https://freeimage.host/api/1/upload");
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, [
+                "key" => $api_key,
+                "action" => "upload",
+                "source" => $image,
+                "format" => "json"
+            ]);
+            $response = curl_exec($ch);
+            curl_close($ch);
+
+            $result = json_decode($response, true);
+            if (isset($result["image"]["url"])) {
+                $file = $result["image"]["url"];
+            }
         }
     }
+
 
     if (empty($errors)) {
         $_SESSION["form_data"] = $data;
