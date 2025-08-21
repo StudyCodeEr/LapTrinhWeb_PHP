@@ -22,29 +22,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($data["email"] === "" || !filter_var($data["email"], FILTER_VALIDATE_EMAIL)) $errors["email"] = "Invalid email";
     if ($data["invoice"] === "") $errors["invoice"] = "Required";
 
+    // 🔹 Upload lên freeimage.host thay vì lưu local
     if (isset($_FILES["receipt"]) && $_FILES["receipt"]["error"] == UPLOAD_ERR_OK) {
-        $ext = pathinfo($_FILES["receipt"]["name"], PATHINFO_EXTENSION);
+        $api_key = "6d207e02198a847aa98d0a2a901485a5";
+        $image = base64_encode(file_get_contents($_FILES["receipt"]["tmp_name"]));
 
-        // Đảm bảo có thư mục uploads với quyền ghi
-        $uploadDir = __DIR__ . "/uploads";
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0777, true);
-        }
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://freeimage.host/api/1/upload");
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, [
+            "key" => $api_key,
+            "action" => "upload",
+            "source" => $image,
+            "format" => "json"
+        ]);
+        $response = curl_exec($ch);
+        curl_close($ch);
 
-        $newName = "receipt_" . time() . "." . $ext;
-        $file = "uploads/$newName";
-        $targetPath = $uploadDir . "/" . $newName;
-
-        if (!move_uploaded_file($_FILES["receipt"]["tmp_name"], $targetPath)) {
-            die("❌ Upload failed: không thể lưu file. Kiểm tra quyền thư mục uploads.");
+        $result = json_decode($response, true);
+        if (isset($result["image"]["url"])) {
+            $file = $result["image"]["url"];
+        } else {
+            $errors["receipt"] = "Upload failed. Please try again.";
         }
     }
 
     if (empty($errors)) {
         $_SESSION["form_data"] = $data;
         $_SESSION["receipt"]   = $file;
-
-        // Cookie lưu 1 ngày
         setcookie("fullname", $data["first_name"] . " " . $data["last_name"], time() + 86400, "/");
         setcookie("email", $data["email"], time() + 86400, "/");
     }
@@ -52,6 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Payment Receipt Upload Form</title>
@@ -62,42 +69,50 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             display: flex;
             justify-content: center;
         }
+
         .container {
             width: 700px;
             border: 1px solid #ddd;
             padding: 25px;
             margin-top: 20px;
         }
+
         h2 {
             text-align: center;
             margin-bottom: 25px;
             color: #666;
         }
+
         .row {
             display: flex;
             gap: 15px;
         }
+
         .field {
             flex: 1;
             margin-bottom: 15px;
         }
+
         .fielddown {
             flex: 1;
             margin-bottom: 15px;
             margin-top: 18px;
         }
+
         label {
             display: block;
             font-weight: bold;
             margin-bottom: 5px;
             color: #555;
         }
+
         small.hint {
             display: block;
             font-size: 12px;
             color: #666;
             margin-top: 5px;
         }
+
         input[type=text],
         input[type=email],
         textarea {
@@ -106,26 +121,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+
         textarea::placeholder {
             color: #888;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+
         .checkbox-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
             margin-bottom: 15px;
         }
+
         .checkbox-grid label {
             display: flex;
             align-items: center;
             gap: 6px;
             font-weight: normal;
         }
+
         .error {
             color: red;
             font-size: 12px;
         }
+
         .upload-box {
             border: 2px dashed #ccc;
             padding: 30px;
@@ -134,15 +154,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             margin-bottom: 5px;
             color: #666;
         }
+
         .upload-box input[type=file] {
             display: none;
         }
+
         .upload-box span {
             display: block;
             margin-top: 5px;
             font-size: 13px;
             color: #888;
         }
+
         .infotext {
             width: 98%;
             height: 100px;
@@ -151,6 +174,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border-radius: 4px;
             margin-bottom: 15px;
         }
+
         button {
             padding: 10px 20px;
             background: linear-gradient(#555, #000);
@@ -161,6 +185,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             display: block;
             margin: 0 auto;
         }
+
         .textupload {
             font-size: 13px;
             color: #888;
@@ -168,10 +193,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             margin-top: 1px;
             margin-bottom: 50px;
         }
+
         .show-session-link {
             text-align: center;
             margin-top: 20px;
         }
+
         .show-session-link a {
             display: inline-block;
             padding: 10px 18px;
@@ -184,11 +211,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             text-decoration: none;
             transition: 0.25s;
         }
+
         .show-session-link a:hover {
             background: #9333ea;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h2>Payment Receipt Upload Form</h2>
@@ -237,8 +266,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     "Other"
                 ];
                 foreach ($options as $opt): ?>
-                    <label><input type="checkbox" name="payfor[]" value="<?= $opt ?>"
-                            <?= in_array($opt, $data["payfor"]) ? "checked" : "" ?>> <?= $opt ?></label>
+                    <label><input type="checkbox" name="payfor[]" value="<?= $opt ?>" <?= in_array($opt, $data["payfor"]) ? "checked" : "" ?>> <?= $opt ?></label>
                 <?php endforeach; ?>
             </div>
 
@@ -249,6 +277,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div><img src="cloud-computing.png" alt="upload icon"></div>
                     <strong>Browse Files</strong><br>Drag and drop files here
                 </label>
+                <div class="error"><?= $errors["receipt"] ?? "" ?></div>
             </div>
             <div class="textupload">jpg, jpeg, png, gif (1mb max.)</div>
 
@@ -283,4 +312,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php endif; ?>
     </div>
 </body>
+
 </html>
