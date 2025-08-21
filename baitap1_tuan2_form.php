@@ -1,6 +1,5 @@
 <?php
 session_start();
-ob_start();
 function h($s)
 {
     return htmlspecialchars($s ?? '', ENT_QUOTES, 'UTF-8');
@@ -25,10 +24,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (isset($_FILES["receipt"]) && $_FILES["receipt"]["error"] == UPLOAD_ERR_OK) {
         $ext = pathinfo($_FILES["receipt"]["name"], PATHINFO_EXTENSION);
-        if (!is_dir("uploads")) mkdir("uploads");
+
+        // Đảm bảo có thư mục uploads với quyền ghi
+        $uploadDir = __DIR__ . "/uploads";
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+
         $newName = "receipt_" . time() . "." . $ext;
-        move_uploaded_file($_FILES["receipt"]["tmp_name"], "uploads/$newName");
         $file = "uploads/$newName";
+        $targetPath = $uploadDir . "/" . $newName;
+
+        if (!move_uploaded_file($_FILES["receipt"]["tmp_name"], $targetPath)) {
+            die("❌ Upload failed: không thể lưu file. Kiểm tra quyền thư mục uploads.");
+        }
     }
 
     if (empty($errors)) {
@@ -43,7 +52,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 <!doctype html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <title>Payment Receipt Upload Form</title>
@@ -54,50 +62,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             display: flex;
             justify-content: center;
         }
-
         .container {
             width: 700px;
             border: 1px solid #ddd;
             padding: 25px;
             margin-top: 20px;
         }
-
         h2 {
             text-align: center;
             margin-bottom: 25px;
             color: #666;
         }
-
         .row {
             display: flex;
             gap: 15px;
         }
-
         .field {
             flex: 1;
             margin-bottom: 15px;
         }
-
         .fielddown {
             flex: 1;
             margin-bottom: 15px;
             margin-top: 18px;
         }
-
         label {
             display: block;
             font-weight: bold;
             margin-bottom: 5px;
             color: #555;
         }
-
         small.hint {
             display: block;
             font-size: 12px;
             color: #666;
             margin-top: 5px;
         }
-
         input[type=text],
         input[type=email],
         textarea {
@@ -106,32 +106,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-
         textarea::placeholder {
             color: #888;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
         .checkbox-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
             margin-bottom: 15px;
         }
-
         .checkbox-grid label {
             display: flex;
             align-items: center;
             gap: 6px;
             font-weight: normal;
         }
-
         .error {
             color: red;
             font-size: 12px;
         }
-
-        /* File upload box */
         .upload-box {
             border: 2px dashed #ccc;
             padding: 30px;
@@ -140,18 +134,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             margin-bottom: 5px;
             color: #666;
         }
-
         .upload-box input[type=file] {
             display: none;
         }
-
         .upload-box span {
             display: block;
             margin-top: 5px;
             font-size: 13px;
             color: #888;
         }
-
         .infotext {
             width: 98%;
             height: 100px;
@@ -160,8 +151,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border-radius: 4px;
             margin-bottom: 15px;
         }
-
-        /* Button */
         button {
             padding: 10px 20px;
             background: linear-gradient(#555, #000);
@@ -172,7 +161,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             display: block;
             margin: 0 auto;
         }
-
         .textupload {
             font-size: 13px;
             color: #888;
@@ -180,12 +168,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             margin-top: 1px;
             margin-bottom: 50px;
         }
-
         .show-session-link {
             text-align: center;
             margin-top: 20px;
         }
-
         .show-session-link a {
             display: inline-block;
             padding: 10px 18px;
@@ -198,14 +184,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             text-decoration: none;
             transition: 0.25s;
         }
-
         .show-session-link a:hover {
             background: #9333ea;
         }
-        
     </style>
 </head>
-
 <body>
     <div class="container">
         <h2>Payment Receipt Upload Form</h2>
@@ -275,7 +258,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <button type="submit">Submit</button>
         </form>
         <?php
-        // Nút quay lại trang tuần tương ứng
         echo '<p><a href="week2.php" style="
             display:inline-block;
             padding:8px 12px;
@@ -300,7 +282,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         <?php endif; ?>
     </div>
-    
 </body>
-
 </html>
