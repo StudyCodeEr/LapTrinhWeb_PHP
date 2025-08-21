@@ -42,6 +42,32 @@ h1 {
     font-size: 22px;
 }
 
+.week-box-none {
+    background: #2f2379;
+    padding: 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    text-decoration: none;
+    color: white;
+    transition: 0.3s;
+    pointer-events: none;
+}
+
+.week-box-none:hover {
+    background: #2b226e;
+    transform: scale(1.05);
+}
+
+.week-box-none h2 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.week-box-none p {
+    margin-top: 5px;
+    font-size: 14px;
+}
+
 .week-box p {
     margin-top: 5px;
     font-size: 14px;

@@ -16,11 +16,11 @@
             <h2>Tuần 2</h2>
             <p>Bài tập GET & POST</p>
         </a>
-        <a class="week-box" href="week3.php">
+        <a class="week-box-none" href="week3.php">
             <h2>Tuần 3</h2>
             <p>?</p>
         </a>
-        <a class="week-box" href="week4.php">
+        <a class="week-box-none" href="week4.php">
             <h2>Tuần 4</h2>
             <p>?</p>
         </a>
