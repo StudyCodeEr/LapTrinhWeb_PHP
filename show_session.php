@@ -97,7 +97,7 @@ $cookie_email    = $_COOKIE["email"] ?? "";
         </div>
         <div class="card">
             <?php if (!$data): ?>
-                <p>Chưa có dữ liệu trong session. Hãy quay lại <a href="payment_form.php">payment_form.php</a> nhập trước.</p>
+                <p>Chưa có dữ liệu trong session. Hãy quay lại <a href="baitap1_tuan2_form.php">Payment Form</a> nhập trước.</p>
             <?php else: ?>
                 <p><strong>Name:</strong> <?= h($data["first_name"] . " " . $data["last_name"]) ?></p>
                 <p><strong>Email:</strong> <?= h($data["email"]) ?></p>
@@ -109,13 +109,13 @@ $cookie_email    = $_COOKIE["email"] ?? "";
         </div>
 
         <div class="card">
-            <p><strong>Cookie lưu 1 ngày:</strong></p>
+            <p><strong>Cookie:</strong></p>
             <p>Fullname: <?= h($cookie_fullname) ?></p>
             <p>Email: <?= h($cookie_email) ?></p>
         </div>
 
         <div class="actions">
-            <form action="form.php" method="post">
+            <form action="baitap1_tuan2_form.php" method="post">
                 <button type="submit" class="btn back">Quay về trang nhập form</button>
             </form>
             <form action="wipe.php" method="post">
