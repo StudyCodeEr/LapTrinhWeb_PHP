@@ -1,5 +1,6 @@
 <?php
 session_start();
+ob_start();
 function h($s)
 {
     return htmlspecialchars($s ?? '', ENT_QUOTES, 'UTF-8');
