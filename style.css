@@ -110,3 +110,78 @@ h1 {
     margin: 0;
     font-size: 20px;
 }
+/* ----------------- Style cho trang MyGuests ----------------- */
+.myguests {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #333;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.myguests h2 {
+    margin-bottom: 20px;
+    font-size: 28px;
+    color: #372a8a;
+    text-align: center;
+}
+
+.myguests table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.myguests th {
+    background: #a991f1;
+    color: #fff;
+    padding: 12px;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+.myguests td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    font-size: 15px;
+    text-align: center;
+}
+
+.myguests tr:nth-child(even) td {
+    background: #f9f9f9;
+}
+
+.myguests tr:hover td {
+    background: #f1eaff;
+}
+.btn {
+    display: inline-block;
+    margin: 5px;
+    padding: 8px 16px;
+    background: #a991f1;
+    color: #fff;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: 0.3s;
+}
+.btn:hover {
+    background: #8b72de;
+}
+.myguests-body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom right,#372a8a,#211088 );
+    margin: 0;
+    padding: 0;
+    color: white;
+    text-align: center;
+    min-height: 100vh;
+    background: #fff;
+}
